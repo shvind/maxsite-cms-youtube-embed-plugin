@@ -41,7 +41,7 @@ function youtube_embed_mso_options()
 			'ye_center' => array(
 						'type' => 'checkbox', 
 						'name' => 'Центровать плеер?', 
-						'description' => '',
+						'description' => 'Если нету, то нужно добавить в стили p.center {text-align: center;}',
 						'default' => '1'
 					),
 			),
@@ -59,9 +59,17 @@ function youtube_embed_content_callback($matches)
 	if (!isset($options['ye_height'])) $options['ye_height'] = '315';
 	if (!isset($options['ye_center'])) $options['ye_center'] = 'date';
 	
-	$url = substr($matches[1],3,11);
+	$u = $matches[1];
+	#$chk = strpos($u, "/embed/");
+	#if ($chk === false) { 
+		$n = strpos($u,"v=")+2;
+		$url = substr($u,$n,11);
+	#}
+	#else {
+	#	$url = substr($u,6,11);
+	#}
 	
-	if ($options['ye_center']) $out = '<p style="text-align: center;">'; else $out = '<p>';
+	if ($options['ye_center']) $out = '<p class="center">'; else $out = '<p>';
 	$out .= '<iframe width="'. $options['ye_width'] .'" height="'. $options['ye_height'] .'" src="http://www.youtube.com/embed/' . $url . '?wmode=Opaque&amp;wmode=transparent" frameborder="0" allowfullscreen></iframe></p>';
 		
 	return $out;
